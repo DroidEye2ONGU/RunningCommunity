@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="droideye.mapper.MemberInfoMapper">
+    <select id="getAllMemberInfo" resultType="memberinfo">
+        SELECT * FROM MEMBERINFO
+    </select>
+
+    <insert id="addMember" parameterType="memberinfo">
+        <selectKey keyProperty="id" order="BEFORE" resultType="_integer">
+            SELECT SEQ_MEMBERINFOID.nextval FROM dual
+        </selectKey>
+
+        INSERT INTO MEMBERINFO (ID,NICKNAME,PASSWORD,GENDER,AGE,EMAIL,PROVINCECITY,
+        <if test="address != null">
+            ADDRESS,
+        </if>
+        <if test="phone != null">
+            PHONE,
+        </if>
+        PASSWORDQUESTION,PASSWORDANSWER,
+        <if test="recommender != null">
+            RECOMMENDER,
+        </if>
+        POINT,REGISTERDATE,LATESTDATE,STATUS,ISONLINE,GRADEID)
+        VALUES (#{id},#{nickName},#{password},#{gender},#{age},#{email},#{provinceCity},
+        <if test="address != null">
+            #{address},
+        </if>
+        <if test="phone != null">
+            #{phone},
+        </if>
+        #{passwordQuestion},#{passwordAnswer},
+        <if test="recommender != null">
+            #{recommender},
+        </if>
+        #{point},#{registerDate},#{latestDate},#{status},#{isOnline},#{gradeId})
+    </insert>
+
+    <select id="querySingleMemberByNickName" resultType="memberinfo" parameterType="string">
+        SELECT * FROM MEMBERINFO WHERE NICKNAME=#{nickName}
+    </select>
+
+    <select id="querySingleMemberById" resultType="memberinfo">
+        SELECT * FROM MEMBERINFO WHERE ID=#{id}
+    </select>
+
+    <update id="updateIsOnlineByNickName">
+        UPDATE MEMBERINFO SET ISONLINE=#{isOnline}
+        WHERE NICKNAME=#{nickName}
+    </update>
+
+    <update id="updateStatusByNickName">
+        UPDATE MEMBERINFO SET STATUS=#{status}
+        WHERE NICKNAME=#{nickName}
+    </update>
+
+    <update id="addPointByNickName">
+        UPDATE MEMBERINFO SET POINT=POINT+#{point}
+        WHERE NICKNAME=#{nickName}
+    </update>
+
+    <update id="subPointByNickName">
+        UPDATE MEMBERINFO SET POINT = POINT-#{point}
+        WHERE NICKNAME=#{nickName}
+    </update>
+
+    <update id="changeLatestOnlineTimeByNickName">
+        UPDATE MEMBERINFO SET LATESTDATE=#{time}
+        WHERE NICKNAME=#{nickName}
+    </update>
+
+    <select id="findPasswordQuestionByNickname" parameterType="string" resultType="string">
+        SELECT MEMBERINFO.PASSWORDQUESTION
+        FROM MEMBERINFO
+        WHERE NICKNAME=#{nickName}
+    </select>
+
+    <select id="findPasswordQuestionAnswerByNickName" parameterType="string" resultType="string">
+        SELECT MEMBERINFO.PASSWORDANSWER
+        FROM MEMBERINFO
+        WHERE NICKNAME=#{nickName}
+    </select>
+
+    <update id="changePasswordByNickName" >
+        UPDATE MEMBERINFO SET PASSWORD=#{newPass}
+        WHERE NICKNAME=#{nickName}
+    </update>
+
+    <select id="queryPasswordByNickName" resultType="string">
+        SELECT MEMBERINFO.PASSWORD
+        FROM MEMBERINFO
+        WHERE NICKNAME=#{nickName}
+    </select>
+
+    <update id="modifyMemberInfoByNickName" parameterType="memberinfo">
+        UPDATE MEMBERINFO
+        SET PASSWORD=#{password},GENDER=#{gender},EMAIL=#{email},
+        PASSWORDQUESTION=#{passwordQuestion},PASSWORDANSWER=#{passwordAnswer},
+        PROVINCECITY=#{provinceCity},ADDRESS=#{address},PHONE=#{phone}
+        WHERE NICKNAME=#{nickName}
+    </update>
+
+    <select id="getOnlineCount" resultType="integer">
+        SELECT count(*) FROM MEMBERINFO WHERE ISONLINE=1
+    </select>
+</mapper>

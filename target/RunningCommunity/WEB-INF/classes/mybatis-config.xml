@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 此配置文件可以不要 -->
+
+    <!-- 2.settings：用来配置MyBatis中的一些设置 -->
+    <settings>
+        <!--开启驼峰命名法,可以将数据库中的下划线映射为驼峰命名,该属性默认为false -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+
+    </settings>
+
+</configuration>

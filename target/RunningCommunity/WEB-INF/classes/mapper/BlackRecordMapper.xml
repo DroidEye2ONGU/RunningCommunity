@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="droideye.mapper.BlackRecordMapper">
+    <insert id="addOneBlackRecord" parameterType="blackrecord">
+    <selectKey resultType="integer" keyProperty="id" order="BEFORE">
+        SELECT SEQ_BLACKRECORDID.nextval FROM dual
+    </selectKey>
+        INSERT INTO BLACKRECORD (ID, SELFNAME, BLACKNAME)
+        VALUES (#{id},#{selfName},#{blackName})
+    </insert>
+
+    <select id="queryAllBlackRecordsBySelfName" resultType="blackrecord">
+        SELECT * FROM BLACKRECORD
+        WHERE SELFNAME=#{selfName}
+    </select>
+
+    <delete id="deleteFromBlackRecord">
+        DELETE FROM BLACKRECORD
+        WHERE SELFNAME=#{selfName} AND BLACKNAME=#{blackName}
+    </delete>
+</mapper>

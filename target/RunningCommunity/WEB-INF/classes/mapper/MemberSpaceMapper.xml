@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="droideye.mapper.MemberSpaceMapper">
+    <insert id="addMemberSpace" parameterType="memberspace" >
+        <selectKey keyProperty="id" order="BEFORE" resultType="integer">
+            SELECT SEQ_MEMBERSPACEID.nextval FROM dual
+        </selectKey>
+
+        INSERT INTO MEMBERSPACE (ID, OPINION, RUNTIME, RUNPLACE, RUNSTAR,
+        RUNHABIT, CELLPHONE,
+        <if test="icon != null">
+            ICON,
+        </if>
+       MEMBERID)
+        VALUES (#{id},#{opinion},#{runTime},#{runPlace},#{runStar},
+        #{runHabit},#{cellPhone},
+        <if test="icon != null">
+            #{icon},
+        </if>
+        #{memberId})
+    </insert>
+
+    <select id="queryMemberSpaceByMemberId" resultType="memberspace">
+        SELECT * FROM MEMBERSPACE WHERE MEMBERID=#{memberId}
+    </select>
+
+    <update id="modifyMemberSpace" parameterType="memberspace">
+        UPDATE MEMBERSPACE
+        SET OPINION=#{opinion},RUNTIME=#{runTime},RUNPLACE=#{runPlace},
+        RUNSTAR=#{runStar},RUNHABIT=#{runHabit},CELLPHONE=#{cellPhone}
+        <if test="icon != null">
+            ,ICON=#{icon}
+        </if>
+        WHERE MEMBERID=#{memberId}
+    </update>
+</mapper>

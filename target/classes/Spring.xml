@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/mvc"
+       xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
+
+    <!-- 配置自动扫描的包,不扫描控制器 -->
+    <context:component-scan base-package="droideye.*">
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 导入外部文件 -->
+    <context:property-placeholder location="classpath:mybatis_jdbc.properties"/>
+
+    <!-- 配置数据源 -->
+    <bean class="com.alibaba.druid.pool.DruidDataSource"
+          id="dataSource">
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="url" value="${url}"/>
+        <property name="driverClassName" value="${driver}"/>
+    </bean>
+
+    <!-- 配置事务管理器 -->
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+          id="transactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 开启事务注解支持 -->
+    <tx:annotation-driven/>
+
+    <!-- 整合MyBatis -->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean"
+          id="sqlSeassionFactoryBean">
+        <!-- 配置数据源 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 配置全局配置文件的路径 -->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!-- 配置Mapper映射文件的路径 -->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+
+        <!-- 设置别名 -->
+        <property name="typeAliasesPackage" value="droideye.pojo"/>
+
+
+
+    </bean>
+
+    <!-- 配置扫描Mapper接口的包的位置-->
+    <mybatis-spring:scan base-package="droideye.mapper"/>
+</beans>

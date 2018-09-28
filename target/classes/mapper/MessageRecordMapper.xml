@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="droideye.mapper.MessageRecordMapper">
+    <insert id="addOneMessage" parameterType="messagerecord">
+        <selectKey resultType="integer" order="BEFORE" keyProperty="id">
+            SELECT SEQ_MESSAGERECORDID.nextval FROM dual
+        </selectKey>
+        INSERT INTO MESSAGERECORD
+        (ID, SENDER, RECEIVER, SENDDATE, TITLE, CONTENT, SENDERSTATUS, RECEIVERSTATUS, STATUS)
+        VALUES
+        (#{id},#{sender},#{receiver},#{sendDate},#{title},#{content},#{senderStatus},
+        #{receiverStatus},#{status})
+    </insert>
+
+    <select id="queryAllSendersMessages" resultType="messagerecord">
+        SELECT * FROM MESSAGERECORD
+        WHERE SENDER=#{sender} AND SENDERSTATUS=0
+    </select>
+
+    <select id="queryAllReceiversMessages" resultType="messagerecord">
+        SELECT * FROM MESSAGERECORD
+        WHERE RECEIVER=#{receiver} AND RECEIVERSTATUS=0
+    </select>
+
+    <select id="querySingleMessageRecordByMessageId" resultType="messagerecord">
+        SELECT * FROM MESSAGERECORD
+        WHERE ID=#{messageId}
+    </select>
+
+    <update id="updateMessageStatus">
+        UPDATE MESSAGERECORD SET
+        STATUS=#{status} WHERE ID=#{messageId}
+    </update>
+
+    <update id="updateSenderStatus">
+        UPDATE MESSAGERECORD SET
+        SENDERSTATUS=#{senderStatus}
+        WHERE ID=#{messageId}
+    </update>
+
+    <update id="updateReceiverStatus">
+        UPDATE MESSAGERECORD SET
+        RECEIVERSTATUS=#{receiverStatus}
+        WHERE ID=#{messageId}
+    </update>
+
+</mapper>
